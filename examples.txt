@@ -1,0 +1,19 @@
+# open html and save it in a file
+url = "https://animevost.org/"
+result = requests.get(url)
+doc = BeautifulSoup(result.text, "html.parser")
+
+# pretty way to output html
+print(doc.prettify())
+
+# get the title and then get the string from it
+tag = doc.title.string
+
+
+
+# use of .parent
+name = doc.findAll('')[0].parent.parent.find("strong").string
+
+#
+tag = doc.find_all("a")  #.find_all() for the nested tag
+print(tag)
