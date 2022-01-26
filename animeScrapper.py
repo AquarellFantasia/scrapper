@@ -1,7 +1,8 @@
 from bs4 import BeautifulSoup
 import requests
 
-def getAnimevostUpdates():
+
+def getAnimevostUpdates(s):
     # List of titles to get update on
     list_of_titles = ["Герой-рационал",
                       "фарфоровая кукла",
@@ -51,5 +52,5 @@ def getAnimevostUpdates():
             returnString += "-"
             returnString += arg.find('a').string
             returnString += "\n"
-            
+            s.add(name)
     return returnString
