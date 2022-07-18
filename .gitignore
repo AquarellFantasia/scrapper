@@ -2,3 +2,5 @@
 venv/
 _pycache_/
 .idea/
+.db
+.csv
