@@ -1,5 +1,6 @@
 import sqlite3
 import os
+from this import d
 import pandas as pd
 
 db_dir = os.getenv('SCRAPPER_DB_PATH')
@@ -11,36 +12,39 @@ class Database:
         self.cursor = self.con.cursor()
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS apartments
                                 (id text PRIMARY KEY,
+                                caseId TEXT,
                                 company TEXT,
-                                longitude REAL,
-                                latitude REAL,
-                                address TEXT,
-                                postcode INTEGER,
+                                longitude TEXT,
+                                latitude TEXT,
+                                coordinatetype TEXT,
+                                street TEXT,
+                                house_nr TEXT, 
+                                floor TEXT,
+                                postcode TEXT,
                                 city TEXT,
-                                area INTEGER,
-                                price INTEGER,
-                                rooms INTEGER,
-                                daysOnMarket INTEGER,
+                                area TEXT,
+                                price TEXT,
+                                rooms TEXT,
+                                daysOnMarket TEXT,
                                 type TEXT,
-                                link TEXT)''')
+                                descriptiontitle TEXT,
+                                descriptionbody TEXT,
+                                date TEXT)''')
         self.con.commit()
         if self.con.total_changes==0:
             print("Table created successfully")
         else:  
             print("Table not created")
     
-    def insert(self, id, company, longitude, latitude, address, 
-               postcode, city, area, price, rooms, daysOnMarket, 
-               type, link):
+    def insert(self, id, caseId, company, longitude, latitude, coordinate_type, street_name, 
+               house_nr, floor, postcode, city, area, price, rooms, daysOnMarket, 
+               property_type, description_title, description_body, date):
         self.cursor.execute('''INSERT OR REPLACE 
                                INTO apartments VALUES (
-                                '{}','{}','{}','{}','{}',
-                                '{}','{}','{}','{}','{}',
-                                '{}','{}','{}')'''\
-                                .format(id,
-                                        company, longitude, latitude, address,
-                                        postcode, city, area, price, rooms, daysOnMarket,
-                                        type, link))
+                                ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)''',
+                                (id, caseId, company, longitude, latitude, coordinate_type, street_name,
+                                house_nr, floor, postcode, city, area, price, rooms, daysOnMarket,
+                                property_type, description_title, description_body, date))
         self.con.commit()
     
     def clean_db(self):
@@ -57,10 +61,14 @@ class Database:
                        detect_types=sqlite3.PARSE_COLNAMES)
         db_df = pd.read_sql_query("SELECT * FROM apartments", conn)
         db_df.to_csv('{}database.csv'.format(location), index=False)
-        
+    
+    def get_count(self):
+        self.cursor.execute("SELECT COUNT(*) FROM apartments")
+        return self.cursor.fetchone()[0]
+     
         
 
-# db = Database()
+#db = Database()
 # db.clean_db()
 # db.to_string()
 # db.insert("test", "test2", 1.0, 2.0, "test1", 1, "test2",  1, 1, 1, 1, "test3", "test4")
@@ -70,10 +78,11 @@ class Database:
 
 # db.to_string()
 
-# db.to_csv(db_dir)
+#db.to_csv(db_dir)
 
 # print('CSV created')
-# df = pd.read_csv('{}database.csv'.format(db_dir))
+#df = pd.read_csv('{}database.csv'.format(db_dir))
+#print(len(df. index))
 # print(df['city'])
 
 
