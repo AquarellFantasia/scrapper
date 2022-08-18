@@ -1,6 +1,6 @@
 .env
 venv/
-_pycache_/
+/_pycache_/
 .idea/
 .db
 .csv
